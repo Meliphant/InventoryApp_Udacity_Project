@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">InventoryApp_Udacity_Project</string>
+    <string name="app_name">Books Store</string>
+    <string name="book_name_1">Android Programming Pushing the Limits</string>
+    <string name="book_price_1">20</string>
+    <string name="book_quantity_1">14</string>
+    <string name="supplier_name_1">Cangoroo LTD</string>
+    <string name="supplier_phone_1">+1 (888) 888-88-88</string>
+    <string name="print_message_about_table">Table contains:</string>
+    <string name="items">items</string>
 </resources>

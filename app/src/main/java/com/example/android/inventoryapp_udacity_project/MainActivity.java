@@ -3,8 +3,8 @@ package com.example.android.inventoryapp_udacity_project;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.android.inventoryapp_udacity_project.data.BooksContract;
@@ -12,7 +12,8 @@ import com.example.android.inventoryapp_udacity_project.data.InventoryDbHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String LOG_TAG = MainActivity.class.getSimpleName();;
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     private InventoryDbHelper mInventoryDbHelper;
 
     @Override
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder stringBuilder = new StringBuilder();
         try {
             // Append title for a message
-            stringBuilder.append(getString(R.string.print_message_about_table) + " " +  + cursor.getCount() + " " + getString(R.string.items) + "\n\n");
+            stringBuilder.append(getString(R.string.print_message_about_table) + " " + +cursor.getCount() + " " + getString(R.string.items) + "\n\n");
             // Append column names
             stringBuilder.append(BooksContract.BooksEntry._ID + " | " +
                     BooksContract.BooksEntry.COLUMN_PRODUCT_NAME + " | " +
@@ -92,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
 
                 stringBuilder.append(
                         currentId + " | " +
-                        currentName + " | " +
-                        currentPrice + " | " +
-                        currentQuantity + " | " +
-                        currentSupplierName + " | " +
-                        currentSupplierPhone + "\n");
+                                currentName + " | " +
+                                currentPrice + " | " +
+                                currentQuantity + " | " +
+                                currentSupplierName + " | " +
+                                currentSupplierPhone + "\n");
             }
         } finally {
             Log.d(LOG_TAG, stringBuilder.toString());

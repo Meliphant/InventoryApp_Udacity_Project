@@ -39,6 +39,14 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
+    private void setUpViews() {
+        Intent startIntent = getIntent();
+        String name = startIntent.getStringExtra(EXTRA_PRODUCT_NAME);
+        int quantity = startIntent.getIntExtra(EXTRA_PRODUCT_QUANTITY, -1);
+        mProductNameEnter.setText(name);
+        mProductQuantityEnter.setText(String.valueOf(quantity));
+    }
+
     public void onSaveClick(View view) {
         Intent resultIntent = new Intent();
         String name = mProductNameEnter.getText().toString();
@@ -76,14 +84,6 @@ public class EditorActivity extends AppCompatActivity {
         }
         setResult(RESPONSE_CODE_DEL, resultIntent);
         finish();
-    }
-
-    private void setUpViews() {
-        Intent startIntent = getIntent();
-        String name = startIntent.getStringExtra(EXTRA_PRODUCT_NAME);
-        int quantity = startIntent.getIntExtra(EXTRA_PRODUCT_QUANTITY, -1);
-        mProductNameEnter.setText(name);
-        mProductQuantityEnter.setText(String.valueOf(quantity));
     }
 
     private void showErrorDialog(String message) {

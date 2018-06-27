@@ -54,7 +54,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     public interface OnProductItemClickListener {
         void onProductSaleClick(Book product);
-
         void onProductEditClick(Book product);
     }
 
@@ -63,7 +62,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private TextView mProductNumberDisplay;
         private TextView mProductNameDisplay;
         private TextView mProductQuantityDisplay;
-        private ImageButton mProductSaleButton;
+        private ImageButton mProductMinusButton;
         private ImageButton mProductEditButton;
 
         ProductViewHolder(View itemView) {
@@ -71,9 +70,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             mProductNumberDisplay = itemView.findViewById(R.id.product_number);
             mProductNameDisplay = itemView.findViewById(R.id.product_name);
             mProductQuantityDisplay = itemView.findViewById(R.id.product_quantity);
-            mProductSaleButton = itemView.findViewById(R.id.btn_quantity_min);
+            mProductMinusButton = itemView.findViewById(R.id.btn_quantity_min);
             mProductEditButton = itemView.findViewById(R.id.btn_edit);
-            mProductSaleButton.setOnClickListener(this);
+            mProductMinusButton.setOnClickListener(this);
             mProductEditButton.setOnClickListener(this);
         }
 
@@ -88,7 +87,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public void onClick(View v) {
             int position = getAdapterPosition();
             Book product = getProduct(position);
-            if (v.getId() == mProductSaleButton.getId()) {
+            if (v.getId() == mProductMinusButton.getId()) {
                 mClickListener.onProductSaleClick(product);
             } else if (v.getId() == mProductEditButton.getId()) {
                 mClickListener.onProductEditClick(product);

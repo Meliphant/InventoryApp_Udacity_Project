@@ -7,4 +7,16 @@
     <string name="supplier_phone_1">+1 (888) 888-88-88</string>
     <string name="print_message_about_table">Table contains:</string>
     <string name="items">items</string>
+
+    <string name="delete_btn">Delete</string>
+    <string name="save_btn">Save</string>
+    <string name="action_add_product">Add Product</string>
+    <string name="editor_activity_title_new_pet">Add Product</string>
+    <string name="quantity">%spc.</string>
+    <string name="name_hint">Product Name</string>
+    <string name="quantity_hint">Quantity</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="name_error_msg">Name can\'t be empty!</string>
+    <string name="quantity_error_msg">Quantity must be integer value</string>
+    <string name="ok_button">OK</string>
 </resources>

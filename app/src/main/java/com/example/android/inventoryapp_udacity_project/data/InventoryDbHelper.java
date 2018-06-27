@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class InventoryDbHelper extends SQLiteOpenHelper {
 
+    public static final String LOG_TAG = InventoryDbHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "inventory.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -15,15 +16,12 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SQL_CREATE_BOOKS_TABLE =  "CREATE TABLE " + BooksContract.BooksEntry.TABLE_NAME + " ("
-                + BooksContract.BooksEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + BooksContract.BooksEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
-                + BooksContract.BooksEntry.COLUMN_PRODUCT_PRICE + " TEXT NOT NULL DEFAULT 0, "
-                + BooksContract.BooksEntry.COLUMN_QUANTITY + " INTEGER NOT NULL, "
-                + BooksContract.BooksEntry.COLUMN_SUPPLIER_NAME + " INTEGER, "
-                + BooksContract.BooksEntry.COLUMN_SUPPLIER_PHONE + " INTEGER);";
+        String SQL_CREATE_PRODUCTS_TABLE = "CREATE TABLE " + ProductContract.ProductEntry.TABLE_NAME + " ("
+                + ProductContract.ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ProductContract.ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
+                + ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0);";
 
-        db.execSQL(SQL_CREATE_BOOKS_TABLE);
+        db.execSQL(SQL_CREATE_PRODUCTS_TABLE);
     }
 
     @Override

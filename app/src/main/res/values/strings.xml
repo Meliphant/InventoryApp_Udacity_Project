@@ -25,4 +25,6 @@
     <string name="quantity_error_msg">Quantity must be integer value</string>
     <string name="price_error_msg">Price must be integer value</string>
     <string name="ok_button">OK</string>
+    <string name="increase_button">+</string>
+    <string name="descrease_button">-</string>
 </resources>

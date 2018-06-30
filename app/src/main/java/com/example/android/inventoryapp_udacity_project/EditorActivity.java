@@ -8,7 +8,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -30,6 +32,10 @@ public class EditorActivity extends AppCompatActivity {
     private EditText mSupplierNameEnter;
     private EditText mSupplierPhoneEnter;
     private int mRequestCode;
+    private Button mDecreaseQuantity;
+    private Button mIncreaseQuantity;
+    private Button mSave;
+    private Button mDelete;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,10 +47,39 @@ public class EditorActivity extends AppCompatActivity {
         mProductPriceEnter = findViewById(R.id.edit_price);
         mSupplierNameEnter = findViewById(R.id.edit_supplier_name);
         mSupplierPhoneEnter = findViewById(R.id.edit_supplier_phone);
+        mDecreaseQuantity = findViewById(R.id.btn_decrease);
+        mIncreaseQuantity = findViewById(R.id.btn_increase);
+        mSave = findViewById(R.id.btn_save);
+        mDelete = findViewById(R.id.btn_delete);
 
         mRequestCode = getIntent().getIntExtra(EXTRA_REQUEST_CODE, -1);
         if (mRequestCode == REQUEST_CODE_EDIT) {
             setUpViews();
+        }
+
+        mDecreaseQuantity.setOnClickListener(new buttonClick());
+        mIncreaseQuantity.setOnClickListener(new buttonClick());
+        mSave.setOnClickListener(new buttonClick());
+        mDelete.setOnClickListener(new buttonClick());
+    }
+
+    class buttonClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            switch(v.getId()){
+                case R.id.btn_decrease:
+                    Toast.makeText(EditorActivity.this, "btn_decrease", Toast.LENGTH_LONG).show();
+                    break;
+                case R.id.btn_increase:
+                    Toast.makeText(EditorActivity.this, "btn_increase", Toast.LENGTH_LONG).show();
+                    break;
+                case R.id.btn_delete:
+                    onDeleteClick();
+                    break;
+                case R.id.btn_save:
+                    onSaveClick();
+                    break;
+            }
         }
     }
 
@@ -62,7 +97,7 @@ public class EditorActivity extends AppCompatActivity {
         mSupplierPhoneEnter.setText(supplierPhone);
     }
 
-    public void onSaveClick(View view) {
+    public void onSaveClick() {
         Intent resultIntent = new Intent();
         String name = mProductNameEnter.getText().toString();
         String supplierName = mSupplierNameEnter.getText().toString();
@@ -114,7 +149,7 @@ public class EditorActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onDeleteClick(View view) {
+    public void onDeleteClick() {
         Intent resultIntent = new Intent();
         if (mRequestCode == REQUEST_CODE_EDIT) {
             int id = getIntent().getIntExtra(EXTRA_PRODUCT_ID, -1);

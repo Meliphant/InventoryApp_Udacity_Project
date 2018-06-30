@@ -24,15 +24,40 @@
         android:textAlignment="center"
         tools:text="Book Name" />
 
-    <EditText
-        android:id="@+id/edit_quantity"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/quantity_hint"
-        android:inputType="numberDecimal"
-        android:textAlignment="center"
-        tools:text="14" />
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btn_descrease"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/descrease_button" />
+
+        <EditText
+            android:id="@+id/edit_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:hint="@string/quantity_hint"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            tools:text="14" />
+
+        <Button
+            android:id="@+id/btn_increase"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/increase_button" />
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/edit_price"
@@ -59,6 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/supplier_phone_hint"
+        android:inputType="phone"
         android:textAlignment="center"
         tools:text="Supplier Phone" />
 
@@ -72,19 +98,19 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/btn_delete"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
             android:background="@color/mainBackground"
-            android:onClick="onDeleteClick"
             android:text="@string/delete_btn" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/btn_save"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
             android:background="@color/colorAccent"
-            android:onClick="onSaveClick"
             android:text="@string/save_btn" />
 
     </LinearLayout>

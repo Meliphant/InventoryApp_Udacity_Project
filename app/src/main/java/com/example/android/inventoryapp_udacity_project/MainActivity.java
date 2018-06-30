@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements
 
         int productId = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_ID, -1);
 
-        if (resultCode == EditorActivity.RESPONSE_CODE_DEL) {
+        if (resultCode == EditorActivity.RESPONSE_CODE_DELETE) {
             deleteProduct(productId);
         }
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements
         return (requestCode == EditorActivity.REQUEST_CODE_CREATE
                 || requestCode == EditorActivity.REQUEST_CODE_EDIT)
                 && (responseCode == EditorActivity.RESPONSE_CODE_TRUE
-                || responseCode == EditorActivity.RESPONSE_CODE_DEL);
+                || responseCode == EditorActivity.RESPONSE_CODE_DELETE);
     }
 
     private void insertProduct(String name, int quantity, int price,

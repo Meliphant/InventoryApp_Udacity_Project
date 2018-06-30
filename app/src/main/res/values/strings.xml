@@ -19,11 +19,17 @@
     <string name="supplier_name_hint">Supplier Name</string>
     <string name="supplier_phone_hint">Supplier Phone</string>
     <string name="error_dialog_title">Error</string>
+    <string name="confirm_dialog_title">Confirm</string>
+    <string name="cancel_dialog_title">Cancel</string>
     <string name="name_error_msg">Name can\'t be empty!</string>
+    <string name="wrong_number_error_msg">Wrong number format.</string>
+    <string name="no_dialer_error_msg">Sorry, the call can not be made because you
+        don\'t have dialer application.</string>
     <string name="supplier_name_error_msg">Supplier name can\'t be empty!</string>
     <string name="supplier_phone_error_msg">Supplier phone can\'t be empty!</string>
     <string name="quantity_error_msg">Quantity must be integer value</string>
     <string name="price_error_msg">Price must be integer value</string>
+    <string name="delete_alert">Delete an item?</string>
     <string name="ok_button">OK</string>
     <string name="increase_button">+</string>
     <string name="descrease_button">-</string>

@@ -27,13 +27,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_descrease"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/btn_decrease"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/descrease_button" />
@@ -42,8 +42,8 @@
             android:id="@+id/edit_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:hint="@string/quantity_hint"
             android:inputType="numberDecimal"
             android:textAlignment="center"
@@ -51,8 +51,8 @@
 
         <Button
             android:id="@+id/btn_increase"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/increase_button" />
@@ -63,7 +63,7 @@
         android:id="@+id/edit_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:hint="@string/price_hint"
         android:inputType="numberDecimal"
         android:textAlignment="center"
@@ -78,15 +78,31 @@
         android:textAlignment="center"
         tools:text="Supplier Name" />
 
-    <EditText
-        android:id="@+id/edit_supplier_phone"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="@string/supplier_phone_hint"
-        android:inputType="phone"
-        android:textAlignment="center"
-        tools:text="Supplier Phone" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_supplier_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/supplier_phone_hint"
+            android:inputType="phone"
+            android:textAlignment="center"
+            tools:text="Supplier Phone" />
+
+        <ImageView
+            android:id="@+id/iv_supplier_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_call"
+            android:padding="8dp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -96,18 +112,18 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_delete"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
             android:background="@color/mainBackground"
             android:text="@string/delete_btn" />
 
         <Button
+            android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_save"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
             android:background="@color/colorAccent"

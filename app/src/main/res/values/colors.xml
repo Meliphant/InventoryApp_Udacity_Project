@@ -3,6 +3,5 @@
     <color name="colorPrimary">#FF009688</color>
     <color name="colorPrimaryDark">#FF00796b</color>
     <color name="colorAccent">#FF009688</color>
-    <color name="editorBackground">#FFd6d7d7</color>
     <color name="mainBackground">#FFe0f2f1</color>
 </resources>

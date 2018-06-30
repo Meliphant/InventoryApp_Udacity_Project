@@ -1,17 +1,13 @@
 package com.example.android.inventoryapp_udacity_project;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.nfc.Tag;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp_udacity_project.data.Book;
@@ -27,38 +23,27 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         mClickListener = clickListener;
     }
 
+    @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_product, parent, false);
         return new ProductViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ProductViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         holder.bind(position);
     }
 
     @Override
     public int getItemCount() {
         if (null == mCursor) return 0;
-//        return mCursor.getCount();
-//        if (mCursor.size() == 0) {
-//            mRecyclerView.setVisibility(View.INVISIBLE);
-//        } else {
-//            mRecyclerView.setVisibility(View.VISIBLE);
-//        }
         return mCursor.getCount();
     }
 
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
-    }
-
-    public interface OnProductItemClickListener {
-        void onProductSaleClick(Book product);
-        void onProductEditClick(Book product);
-        void onProductListClick(Book product);
     }
 
     private Book getProduct(int position) {
@@ -70,6 +55,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         String supplierName = mCursor.getString(MainActivity.INDEX_SUPPLIER_NAME);
         String supplierPhone = mCursor.getString(MainActivity.INDEX_SUPPLIER_PHONE);
         return new Book(id, name, quantity, price, supplierName, supplierPhone);
+    }
+
+    public interface OnProductItemClickListener {
+        void onProductSaleClick(Book product);
+
+        void onProductEditClick(Book product);
+
+        void onProductListClick(Book product);
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

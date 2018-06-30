@@ -2,18 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="32dp"
-    android:background="@color/editorBackground"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:paddingLeft="64dp"
+    android:paddingRight="64dp"
+    android:paddingTop="16dp"
     tools:context=".EditorActivity">
-
-    <TextView
-        android:id="@+id/product_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
 
     <EditText
         android:id="@+id/edit_product_name"
@@ -21,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/name_hint"
-        android:textAlignment="center"
         tools:text="Book Name" />
 
     <LinearLayout
@@ -30,13 +24,6 @@
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_decrease"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/descrease_button" />
 
         <EditText
             android:id="@+id/edit_quantity"
@@ -46,8 +33,15 @@
             android:layout_weight="1"
             android:hint="@string/quantity_hint"
             android:inputType="numberDecimal"
-            android:textAlignment="center"
             tools:text="14" />
+
+        <Button
+            android:id="@+id/btn_decrease"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/descrease_button" />
 
         <Button
             android:id="@+id/btn_increase"
@@ -66,7 +60,6 @@
         android:layout_marginTop="12dp"
         android:hint="@string/price_hint"
         android:inputType="numberDecimal"
-        android:textAlignment="center"
         tools:text="20" />
 
     <EditText
@@ -75,7 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/supplier_name_hint"
-        android:textAlignment="center"
         tools:text="Supplier Name" />
 
     <LinearLayout
@@ -91,21 +83,20 @@
             android:layout_weight="1"
             android:hint="@string/supplier_phone_hint"
             android:inputType="phone"
-            android:textAlignment="center"
             tools:text="Supplier Phone" />
 
         <ImageView
             android:id="@+id/iv_supplier_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_call"
+            android:layout_gravity="center"
             android:padding="8dp"
-            android:layout_gravity="center"/>
+            android:src="@drawable/btn_call" />
     </LinearLayout>
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="64dp"
@@ -113,19 +104,17 @@
 
         <Button
             android:id="@+id/btn_delete"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="8dp"
+            android:layout_weight="1"
             android:background="@color/mainBackground"
             android:text="@string/delete_btn" />
 
         <Button
             android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_weight="1"
             android:background="@color/colorAccent"
             android:text="@string/save_btn" />
 

@@ -40,6 +40,7 @@ public class Book {
     public String getSupplierName() {
         return supplierName;
     }
+
     @Override
     public String toString() {
         return "Book{" +

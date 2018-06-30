@@ -5,23 +5,29 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.android.inventoryapp_udacity_project.data.Book;
 import com.example.android.inventoryapp_udacity_project.data.ProductContract;
 
+import static com.example.android.inventoryapp_udacity_project.data.ProductContract.ProductEntry.CONTENT_URI;
+
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>, ProductAdapter.OnProductItemClickListener {
 
-    public static final String[] MAIN_PRODUCT_PROJECTION = {
+    private static final String[] MAIN_PRODUCT_PROJECTION = {
             ProductContract.ProductEntry._ID,
             ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
             ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY,
@@ -37,8 +43,9 @@ public class MainActivity extends AppCompatActivity implements
     public static final int INDEX_SUPPLIER_PHONE = 5;
     private static final int ID_PRODUCT_LOADER = 42;
     private final String TAG = MainActivity.class.getSimpleName();
-    private RecyclerView mProductsContainer;
+    private RecyclerView recyclerView;
     private ProductAdapter mProductAdapter;
+    private TextView mEmptyActivity;
     private int mPosition = RecyclerView.NO_POSITION;
 
     @Override
@@ -46,15 +53,38 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mProductsContainer = findViewById(R.id.recycler_view);
-
+        mEmptyActivity = findViewById(R.id.text_view_guide);
+        recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mProductsContainer.setLayoutManager(layoutManager);
-
+        recyclerView.setLayoutManager(layoutManager);
         mProductAdapter = new ProductAdapter(this, this);
-        mProductsContainer.setAdapter(mProductAdapter);
+        recyclerView.setAdapter(mProductAdapter);
 
         getSupportLoaderManager().initLoader(ID_PRODUCT_LOADER, null, this);
+
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Cursor countCursor = getContentResolver().query(CONTENT_URI,
+                new String[]{"count(*) AS count"},
+                null,
+                null,
+                null);
+
+        countCursor.moveToFirst();
+        int count = countCursor.getInt(0);
+        if (count == 0) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            mEmptyActivity.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            mEmptyActivity.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -84,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements
 
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, newQuantity);
 
-        int rowsUpdated = getContentResolver().update(ProductContract.ProductEntry.CONTENT_URI, values,
+        int rowsUpdated = getContentResolver().update(CONTENT_URI, values,
                 "_id = ?", new String[]{String.valueOf(product.getId())});
 
         if (rowsUpdated == 1) {
@@ -138,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements
 
         String productName = data.getStringExtra(EditorActivity.EXTRA_PRODUCT_NAME);
         int productQuantity = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, -1);
-        int productPrice = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_PRICE,-1);
+        int productPrice = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_PRICE, -1);
         String supplierName = data.getStringExtra(EditorActivity.EXTRA_SUPPLIER_NAME);
         String supplierPhone = data.getStringExtra(EditorActivity.EXTRA_SUPPLIER_PHONE);
 
@@ -153,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
         if (loaderId != ID_PRODUCT_LOADER) {
@@ -162,19 +193,19 @@ public class MainActivity extends AppCompatActivity implements
         String sortOrder = ProductContract.ProductEntry._ID + " ASC";
 
         return new CursorLoader(this,
-                ProductContract.ProductEntry.CONTENT_URI,
+                CONTENT_URI,
                 MAIN_PRODUCT_PROJECTION,
                 null, null,
                 sortOrder);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         mProductAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mProductAdapter.swapCursor(null);
     }
 
@@ -200,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements
         values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhone);
 
-        Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, values);
+        Uri newUri = getContentResolver().insert(CONTENT_URI, values);
 
         if (newUri != null) {
             getSupportLoaderManager().restartLoader(ID_PRODUCT_LOADER, null, this);
@@ -216,8 +247,8 @@ public class MainActivity extends AppCompatActivity implements
         values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhone);
 
-        int rowsUpdated = getContentResolver().update(ProductContract.ProductEntry.CONTENT_URI, values,
-                "_id = ?", new String[]{String.valueOf(id)});
+        int rowsUpdated = getContentResolver().update(CONTENT_URI,
+                values, "_id = ?", new String[]{String.valueOf(id)});
 
         if (rowsUpdated == 1) {
             getSupportLoaderManager().restartLoader(ID_PRODUCT_LOADER, null, this);
@@ -225,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void deleteProduct(int id) {
-        int rowsUpdated = getContentResolver().delete(ProductContract.ProductEntry.CONTENT_URI,
+        int rowsUpdated = getContentResolver().delete(CONTENT_URI,
                 "_id = ?", new String[]{String.valueOf(id)});
 
         if (rowsUpdated == 1) {

@@ -1,38 +1,33 @@
 package com.example.android.inventoryapp_udacity_project;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class EditorActivity extends AppCompatActivity {
 
-    public static int REQUEST_CODE_CREATE = 10;
-    public static int REQUEST_CODE_EDIT = 11;
-    public static int RESPONSE_CODE_TRUE = 20;
-    public static int RESPONSE_CODE_DELETE = 21;
-    public static String EXTRA_REQUEST_CODE = "extra_request_code";
-    public static String EXTRA_PRODUCT_ID = "extra_product_id";
-    public static String EXTRA_PRODUCT_NAME = "extra_product_name";
-    public static String EXTRA_PRODUCT_QUANTITY = "extra_product_quantity";
-    public static String EXTRA_PRODUCT_PRICE = "price";
-    public static String EXTRA_SUPPLIER_NAME = "supplier_name";
-    public static String EXTRA_SUPPLIER_PHONE = "supplier_phone";
+    public static final int REQUEST_CODE_CREATE = 10;
+    public static final int REQUEST_CODE_EDIT = 11;
+    public static final int RESPONSE_CODE_TRUE = 20;
+    public static final int RESPONSE_CODE_DELETE = 21;
+    public static final String EXTRA_REQUEST_CODE = "extra_request_code";
+    public static final String EXTRA_PRODUCT_ID = "extra_product_id";
+    public static final String EXTRA_PRODUCT_NAME = "extra_product_name";
+    public static final String EXTRA_PRODUCT_QUANTITY = "extra_product_quantity";
+    public static final String EXTRA_PRODUCT_PRICE = "price";
+    public static final String EXTRA_SUPPLIER_NAME = "supplier_name";
+    public static final String EXTRA_SUPPLIER_PHONE = "supplier_phone";
 
-    private static int CONFIRMATION_ALERT_DELETE = 0;
+    private static final int CONFIRMATION_ALERT_DELETE = 0;
 
     private EditText mProductNameEnter;
     private EditText mProductQuantityEnter;
@@ -44,8 +39,39 @@ public class EditorActivity extends AppCompatActivity {
     private Button mIncreaseQuantity;
     private Button mSave;
     private Button mDelete;
-    private int quantity;
+    private int quantity = 0;
     private ImageView mSupplierCall;
+    private final View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_decrease:
+                    if (mProductQuantityEnter.getText().length() > 0) {
+                        quantity = Integer.parseInt(mProductQuantityEnter.getText().toString());
+                    }
+                    quantity--;
+                    if (quantity >= 0) mProductQuantityEnter.setText(String.valueOf(quantity));
+                    else showErrorDialog(getString(R.string.quantity_error_msg));
+                    break;
+                case R.id.btn_increase:
+                    if (mProductQuantityEnter.getText().length() > 0) {
+                        quantity = Integer.parseInt(mProductQuantityEnter.getText().toString());
+                    }
+                    quantity++;
+                    mProductQuantityEnter.setText(String.valueOf(quantity));
+                    break;
+                case R.id.btn_delete:
+                    onDeleteClick();
+                    break;
+                case R.id.btn_save:
+                    onSaveClick();
+                    break;
+                case R.id.iv_supplier_call:
+                    onCallClick();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,35 +101,6 @@ public class EditorActivity extends AppCompatActivity {
         mSupplierCall.setOnClickListener(onClickListener);
     }
 
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch(v.getId()){
-                case R.id.btn_decrease:
-                    quantity = Integer.parseInt(mProductQuantityEnter.getText().toString());
-                    quantity --;
-                    if (quantity >= 0) mProductQuantityEnter.setText(String.valueOf(quantity));
-                    else showErrorDialog(getString(R.string.quantity_error_msg));
-                    break;
-                case R.id.btn_increase:
-                    quantity = Integer.parseInt(mProductQuantityEnter.getText().toString());
-                    quantity ++;
-                    mProductQuantityEnter.setText(String.valueOf(quantity));
-                    break;
-                case R.id.btn_delete:
-                    onDeleteClick();
-                    break;
-                case R.id.btn_save:
-                    onSaveClick();
-                    break;
-                case R.id.iv_supplier_call:
-                    Log.d("EditorActivity", "CLICK");
-                    onCallClick();
-                    break;
-            }
-        }
-    };
-
     private void setUpViews() {
         Intent startIntent = getIntent();
         String name = startIntent.getStringExtra(EXTRA_PRODUCT_NAME);
@@ -118,7 +115,7 @@ public class EditorActivity extends AppCompatActivity {
         mSupplierPhoneEnter.setText(supplierPhone);
     }
 
-    public void onSaveClick() {
+    private void onSaveClick() {
         Intent resultIntent = new Intent();
         String name = mProductNameEnter.getText().toString();
         String supplierName = mSupplierNameEnter.getText().toString();
@@ -169,11 +166,11 @@ public class EditorActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onDeleteClick() {
+    private void onDeleteClick() {
         showConfirmationDialog(getString(R.string.delete_alert), CONFIRMATION_ALERT_DELETE);
     }
 
-    private void onCallClick(){
+    private void onCallClick() {
         String phoneNumber = String.format("tel: %s", mSupplierPhoneEnter.getText().toString());
         if (validCellPhone(phoneNumber)) {
             Intent dialIntent = new Intent(Intent.ACTION_DIAL);
@@ -183,7 +180,7 @@ public class EditorActivity extends AppCompatActivity {
             } else {
                 showErrorDialog(getString(R.string.no_dialer_error_msg));
             }
-        }else {
+        } else {
             showErrorDialog(getString(R.string.wrong_number_error_msg));
         }
     }

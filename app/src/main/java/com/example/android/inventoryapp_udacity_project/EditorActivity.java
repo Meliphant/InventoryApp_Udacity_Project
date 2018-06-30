@@ -20,9 +20,11 @@ public class EditorActivity extends AppCompatActivity {
     public static String EXTRA_PRODUCT_ID = "extra_product_id";
     public static String EXTRA_PRODUCT_NAME = "extra_product_name";
     public static String EXTRA_PRODUCT_QUANTITY = "extra_product_quantity";
+    public static String EXTRA_PRODUCT_PRICE = "price";
 
     private EditText mProductNameEnter;
     private EditText mProductQuantityEnter;
+    private EditText mProductPriceEnter;
     private int mRequestCode;
 
     @Override
@@ -32,6 +34,7 @@ public class EditorActivity extends AppCompatActivity {
 
         mProductNameEnter = findViewById(R.id.edit_product_name);
         mProductQuantityEnter = findViewById(R.id.edit_quantity);
+        mProductPriceEnter = findViewById(R.id.edit_price);
 
         mRequestCode = getIntent().getIntExtra(EXTRA_REQUEST_CODE, -1);
         if (mRequestCode == REQUEST_CODE_EDIT) {
@@ -43,14 +46,17 @@ public class EditorActivity extends AppCompatActivity {
         Intent startIntent = getIntent();
         String name = startIntent.getStringExtra(EXTRA_PRODUCT_NAME);
         int quantity = startIntent.getIntExtra(EXTRA_PRODUCT_QUANTITY, -1);
+        int price = startIntent.getIntExtra(EXTRA_PRODUCT_PRICE, -1);
         mProductNameEnter.setText(name);
         mProductQuantityEnter.setText(String.valueOf(quantity));
+        mProductPriceEnter.setText(String.valueOf(price));
     }
 
     public void onSaveClick(View view) {
         Intent resultIntent = new Intent();
         String name = mProductNameEnter.getText().toString();
         int quantity;
+        int price;
 
         if (TextUtils.isEmpty(name)) {
             showErrorDialog(getString(R.string.name_error_msg));
@@ -64,8 +70,16 @@ public class EditorActivity extends AppCompatActivity {
             return;
         }
 
+        try {
+            price = Integer.parseInt(mProductPriceEnter.getText().toString());
+        } catch (NumberFormatException e) {
+            showErrorDialog(getString(R.string.price_error_msg));
+            return;
+        }
+
         resultIntent.putExtra(EXTRA_PRODUCT_NAME, name);
         resultIntent.putExtra(EXTRA_PRODUCT_QUANTITY, quantity);
+        resultIntent.putExtra(EXTRA_PRODUCT_PRICE, price);
 
         if (mRequestCode == REQUEST_CODE_EDIT) {
             int id = getIntent().getIntExtra(EXTRA_PRODUCT_ID, -1);

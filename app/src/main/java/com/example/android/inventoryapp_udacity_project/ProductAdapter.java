@@ -1,12 +1,17 @@
 package com.example.android.inventoryapp_udacity_project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.nfc.Tag;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp_udacity_project.data.Book;
@@ -36,6 +41,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public int getItemCount() {
         if (null == mCursor) return 0;
+//        return mCursor.getCount();
+//        if (mCursor.size() == 0) {
+//            mRecyclerView.setVisibility(View.INVISIBLE);
+//        } else {
+//            mRecyclerView.setVisibility(View.VISIBLE);
+//        }
         return mCursor.getCount();
     }
 
@@ -44,17 +55,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         notifyDataSetChanged();
     }
 
+    public interface OnProductItemClickListener {
+        void onProductSaleClick(Book product);
+        void onProductEditClick(Book product);
+        void onProductListClick(Book product);
+    }
+
     private Book getProduct(int position) {
         mCursor.moveToPosition(position);
         int id = mCursor.getInt(MainActivity.INDEX_PRODUCT_ID);
         String name = mCursor.getString(MainActivity.INDEX_PRODUCT_NAME);
         int quantity = mCursor.getInt(MainActivity.INDEX_PRODUCT_QUANTITY);
-        return new Book(id, name, quantity);
-    }
-
-    public interface OnProductItemClickListener {
-        void onProductSaleClick(Book product);
-        void onProductEditClick(Book product);
+        int price = mCursor.getInt(MainActivity.INDEX_PRODUCT_PRICE);
+        return new Book(id, name, quantity, price);
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -62,6 +75,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private TextView mProductNumberDisplay;
         private TextView mProductNameDisplay;
         private TextView mProductQuantityDisplay;
+        private TextView mProductPriceDisplay;
         private ImageButton mProductMinusButton;
         private ImageButton mProductEditButton;
 
@@ -72,8 +86,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             mProductQuantityDisplay = itemView.findViewById(R.id.product_quantity);
             mProductMinusButton = itemView.findViewById(R.id.btn_quantity_min);
             mProductEditButton = itemView.findViewById(R.id.btn_edit);
+            mProductPriceDisplay = itemView.findViewById(R.id.product_price);
+
             mProductMinusButton.setOnClickListener(this);
             mProductEditButton.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         void bind(int position) {
@@ -81,6 +98,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             mProductNumberDisplay.setText(String.valueOf(product.getId()));
             mProductNameDisplay.setText(product.getName());
             mProductQuantityDisplay.setText(String.valueOf(product.getQuantity()));
+            mProductPriceDisplay.setText(String.valueOf(product.getPrice()));
         }
 
         @Override
@@ -91,6 +109,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 mClickListener.onProductSaleClick(product);
             } else if (v.getId() == mProductEditButton.getId()) {
                 mClickListener.onProductEditClick(product);
+            } else {
+                mClickListener.onProductListClick(product);
             }
         }
     }

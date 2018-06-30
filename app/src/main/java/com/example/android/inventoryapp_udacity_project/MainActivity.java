@@ -24,11 +24,13 @@ public class MainActivity extends AppCompatActivity implements
     public static final String[] MAIN_PRODUCT_PROJECTION = {
             ProductContract.ProductEntry._ID,
             ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
-            ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY
+            ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY,
+            ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE
     };
     public static final int INDEX_PRODUCT_ID = 0;
     public static final int INDEX_PRODUCT_NAME = 1;
     public static final int INDEX_PRODUCT_QUANTITY = 2;
+    public static final int INDEX_PRODUCT_PRICE = 3;
     private static final int ID_PRODUCT_LOADER = 42;
     private final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView mProductsContainer;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         mProductsContainer = findViewById(R.id.recycler_view);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mProductsContainer.setLayoutManager(layoutManager);
 
@@ -91,6 +94,19 @@ public class MainActivity extends AppCompatActivity implements
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_ID, product.getId());
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_NAME, product.getName());
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, product.getQuantity());
+        startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_PRICE, product.getPrice());
+
+        startActivityForResult(startEditProduct, EditorActivity.REQUEST_CODE_EDIT);
+    }
+
+    @Override
+    public void onProductListClick(Book product) {
+        Intent startEditProduct = new Intent(MainActivity.this, EditorActivity.class);
+        startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_ID, product.getId());
+        startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_NAME, product.getName());
+        startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, product.getQuantity());
+        startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_PRICE, product.getPrice());
+
         startActivityForResult(startEditProduct, EditorActivity.REQUEST_CODE_EDIT);
     }
 
@@ -102,36 +118,38 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int productId = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_ID, -1);
-        String productName = data.getStringExtra(EditorActivity.EXTRA_PRODUCT_NAME);
-        int productQuantity = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, -1);
-
         if (!isCorrectResult(requestCode, resultCode)) {
             return;
         }
+
+        int productId = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_ID, -1);
 
         if (resultCode == EditorActivity.RESPONSE_CODE_DEL) {
             deleteProduct(productId);
         }
 
-        if (!isValidProduct(productName, productQuantity)) {
+        String productName = data.getStringExtra(EditorActivity.EXTRA_PRODUCT_NAME);
+        int productQuantity = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, -1);
+        int productPrice = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_PRICE,-1);
+
+        if (!isValidProduct(productName, productQuantity, productPrice)) {
             return;
         }
 
         if (requestCode == EditorActivity.REQUEST_CODE_CREATE) {
-            insertProduct(productName, productQuantity);
+            insertProduct(productName, productQuantity, productPrice);
         } else {
-            updateProduct(productId, productName, productQuantity);
+            updateProduct(productId, productName, productQuantity, productPrice);
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
-
-        String sortOrder = ProductContract.ProductEntry._ID + " ASC";
         if (loaderId != ID_PRODUCT_LOADER) {
             throw new RuntimeException("Loader Not Implemented: " + loaderId);
         }
+
+        String sortOrder = ProductContract.ProductEntry._ID + " ASC";
 
         return new CursorLoader(this,
                 ProductContract.ProductEntry.CONTENT_URI,
@@ -150,8 +168,8 @@ public class MainActivity extends AppCompatActivity implements
         mProductAdapter.swapCursor(null);
     }
 
-    private boolean isValidProduct(String name, int quantity) {
-        return !TextUtils.isEmpty(name) && quantity != -1;
+    private boolean isValidProduct(String name, int quantity, int price) {
+        return !TextUtils.isEmpty(name) && price != -1 && quantity != -1;
     }
 
     private boolean isCorrectResult(int requestCode, int responseCode) {
@@ -161,10 +179,11 @@ public class MainActivity extends AppCompatActivity implements
                 || responseCode == EditorActivity.RESPONSE_CODE_DEL);
     }
 
-    private void insertProduct(String name, int quantity) {
+    private void insertProduct(String name, int quantity, int price) {
         ContentValues values = new ContentValues();
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, name);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
+        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
 
         Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, values);
 
@@ -173,10 +192,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void updateProduct(int id, String name, int quantity) {
+    private void updateProduct(int id, String name, int quantity, int price) {
         ContentValues values = new ContentValues();
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, name);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
+        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
 
         int rowsUpdated = getContentResolver().update(ProductContract.ProductEntry.CONTENT_URI, values,
                 "_id = ?", new String[]{String.valueOf(id)});

@@ -75,6 +75,11 @@ public class ProductProvider extends ContentProvider {
             throw new IllegalArgumentException("Book requires valid quantity");
         }
 
+        Integer price = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
+        if (price != null && price < 0) {
+            throw new IllegalArgumentException("Book requires valid price");
+        }
+
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         long id = database.insert(ProductContract.ProductEntry.TABLE_NAME, null, values);
@@ -113,6 +118,13 @@ public class ProductProvider extends ContentProvider {
             Integer quantity = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
             if (quantity != null && quantity < 0) {
                 throw new IllegalArgumentException("Book requires valid quantity");
+            }
+        }
+
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE)) {
+            Integer price = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
+            if (price != null && price < 0) {
+                throw new IllegalArgumentException("Book requires valid price");
             }
         }
 

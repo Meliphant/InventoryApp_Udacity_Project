@@ -15,8 +15,12 @@
     <string name="quantity">%spc.</string>
     <string name="name_hint">Product Name</string>
     <string name="quantity_hint">Quantity</string>
+    <string name="price_hint">Price for 1 item</string>
+    <string name="supplier_name_hint">Supplier Name</string>
+    <string name="supplier_phone_hint">Supplier Phone</string>
     <string name="error_dialog_title">Error</string>
     <string name="name_error_msg">Name can\'t be empty!</string>
     <string name="quantity_error_msg">Quantity must be integer value</string>
+    <string name="price_error_msg">Price must be integer value</string>
     <string name="ok_button">OK</string>
 </resources>

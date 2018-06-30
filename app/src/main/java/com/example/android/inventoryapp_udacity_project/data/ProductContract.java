@@ -32,6 +32,10 @@ public final class ProductContract {
         public final static String COLUMN_PRODUCT_QUANTITY = "quantity";
 
         public final static String COLUMN_PRODUCT_PRICE = "price";
+
+        public final static String COLUMN_SUPPLIER_NAME = "supplier_name";
+
+        public final static String COLUMN_SUPPLIER_PHONE = "supplier_phone";
     }
 
 }

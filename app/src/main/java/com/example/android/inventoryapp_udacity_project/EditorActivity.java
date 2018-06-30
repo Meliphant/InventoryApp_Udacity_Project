@@ -21,10 +21,14 @@ public class EditorActivity extends AppCompatActivity {
     public static String EXTRA_PRODUCT_NAME = "extra_product_name";
     public static String EXTRA_PRODUCT_QUANTITY = "extra_product_quantity";
     public static String EXTRA_PRODUCT_PRICE = "price";
+    public static String EXTRA_SUPPLIER_NAME = "supplier_name";
+    public static String EXTRA_SUPPLIER_PHONE = "supplier_phone";
 
     private EditText mProductNameEnter;
     private EditText mProductQuantityEnter;
     private EditText mProductPriceEnter;
+    private EditText mSupplierNameEnter;
+    private EditText mSupplierPhoneEnter;
     private int mRequestCode;
 
     @Override
@@ -35,6 +39,8 @@ public class EditorActivity extends AppCompatActivity {
         mProductNameEnter = findViewById(R.id.edit_product_name);
         mProductQuantityEnter = findViewById(R.id.edit_quantity);
         mProductPriceEnter = findViewById(R.id.edit_price);
+        mSupplierNameEnter = findViewById(R.id.edit_supplier_name);
+        mSupplierPhoneEnter = findViewById(R.id.edit_supplier_phone);
 
         mRequestCode = getIntent().getIntExtra(EXTRA_REQUEST_CODE, -1);
         if (mRequestCode == REQUEST_CODE_EDIT) {
@@ -47,19 +53,35 @@ public class EditorActivity extends AppCompatActivity {
         String name = startIntent.getStringExtra(EXTRA_PRODUCT_NAME);
         int quantity = startIntent.getIntExtra(EXTRA_PRODUCT_QUANTITY, -1);
         int price = startIntent.getIntExtra(EXTRA_PRODUCT_PRICE, -1);
+        String supplierName = startIntent.getStringExtra(EXTRA_SUPPLIER_NAME);
+        String supplierPhone = startIntent.getStringExtra(EXTRA_SUPPLIER_PHONE);
         mProductNameEnter.setText(name);
         mProductQuantityEnter.setText(String.valueOf(quantity));
         mProductPriceEnter.setText(String.valueOf(price));
+        mSupplierNameEnter.setText(supplierName);
+        mSupplierPhoneEnter.setText(supplierPhone);
     }
 
     public void onSaveClick(View view) {
         Intent resultIntent = new Intent();
         String name = mProductNameEnter.getText().toString();
+        String supplierName = mSupplierNameEnter.getText().toString();
+        String supplierPhone = mSupplierPhoneEnter.getText().toString();
         int quantity;
         int price;
 
         if (TextUtils.isEmpty(name)) {
             showErrorDialog(getString(R.string.name_error_msg));
+            return;
+        }
+
+        if (TextUtils.isEmpty(supplierName)) {
+            showErrorDialog(getString(R.string.supplier_name_error_msg));
+            return;
+        }
+
+        if (TextUtils.isEmpty(supplierPhone)) {
+            showErrorDialog(getString(R.string.supplier_phone_error_msg));
             return;
         }
 
@@ -80,6 +102,8 @@ public class EditorActivity extends AppCompatActivity {
         resultIntent.putExtra(EXTRA_PRODUCT_NAME, name);
         resultIntent.putExtra(EXTRA_PRODUCT_QUANTITY, quantity);
         resultIntent.putExtra(EXTRA_PRODUCT_PRICE, price);
+        resultIntent.putExtra(EXTRA_SUPPLIER_NAME, supplierName);
+        resultIntent.putExtra(EXTRA_SUPPLIER_PHONE, supplierPhone);
 
         if (mRequestCode == REQUEST_CODE_EDIT) {
             int id = getIntent().getIntExtra(EXTRA_PRODUCT_ID, -1);

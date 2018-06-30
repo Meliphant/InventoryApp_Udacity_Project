@@ -67,7 +67,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         String name = mCursor.getString(MainActivity.INDEX_PRODUCT_NAME);
         int quantity = mCursor.getInt(MainActivity.INDEX_PRODUCT_QUANTITY);
         int price = mCursor.getInt(MainActivity.INDEX_PRODUCT_PRICE);
-        return new Book(id, name, quantity, price);
+        String supplierName = mCursor.getString(MainActivity.INDEX_SUPPLIER_NAME);
+        String supplierPhone = mCursor.getString(MainActivity.INDEX_SUPPLIER_PHONE);
+        return new Book(id, name, quantity, price, supplierName, supplierPhone);
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

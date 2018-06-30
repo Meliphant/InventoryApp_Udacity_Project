@@ -80,6 +80,16 @@ public class ProductProvider extends ContentProvider {
             throw new IllegalArgumentException("Book requires valid price");
         }
 
+        String supplierName = values.getAsString(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
+        if (supplierName == null || supplierName.isEmpty()) {
+            throw new IllegalArgumentException("Supplier's name field should not be empty");
+        }
+
+        String supplierPhone = values.getAsString(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE);
+        if (supplierPhone == null || supplierPhone.isEmpty()) {
+            throw new IllegalArgumentException("Supplier's phone field should not be empty");
+        }
+
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         long id = database.insert(ProductContract.ProductEntry.TABLE_NAME, null, values);
@@ -125,6 +135,20 @@ public class ProductProvider extends ContentProvider {
             Integer price = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
             if (price != null && price < 0) {
                 throw new IllegalArgumentException("Book requires valid price");
+            }
+        }
+
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME)) {
+            String supplierName = values.getAsString(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
+            if (supplierName == null) {
+                throw new IllegalArgumentException("Supplier requires a name");
+            }
+        }
+
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE)) {
+            String supplierPhone = values.getAsString(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE);
+            if (supplierPhone == null) {
+                throw new IllegalArgumentException("Supplier requires a phone");
             }
         }
 

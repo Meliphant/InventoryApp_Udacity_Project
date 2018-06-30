@@ -25,12 +25,16 @@ public class MainActivity extends AppCompatActivity implements
             ProductContract.ProductEntry._ID,
             ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
             ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY,
-            ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE
+            ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE,
+            ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME,
+            ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE
     };
     public static final int INDEX_PRODUCT_ID = 0;
     public static final int INDEX_PRODUCT_NAME = 1;
     public static final int INDEX_PRODUCT_QUANTITY = 2;
     public static final int INDEX_PRODUCT_PRICE = 3;
+    public static final int INDEX_SUPPLIER_NAME = 4;
+    public static final int INDEX_SUPPLIER_PHONE = 5;
     private static final int ID_PRODUCT_LOADER = 42;
     private final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView mProductsContainer;
@@ -95,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_NAME, product.getName());
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, product.getQuantity());
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_PRICE, product.getPrice());
+        startEditProduct.putExtra(EditorActivity.EXTRA_SUPPLIER_NAME, product.getSupplierName());
+        startEditProduct.putExtra(EditorActivity.EXTRA_SUPPLIER_PHONE, product.getSupplierPhone());
 
         startActivityForResult(startEditProduct, EditorActivity.REQUEST_CODE_EDIT);
     }
@@ -106,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_NAME, product.getName());
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, product.getQuantity());
         startEditProduct.putExtra(EditorActivity.EXTRA_PRODUCT_PRICE, product.getPrice());
+        startEditProduct.putExtra(EditorActivity.EXTRA_SUPPLIER_NAME, product.getSupplierName());
+        startEditProduct.putExtra(EditorActivity.EXTRA_SUPPLIER_PHONE, product.getSupplierPhone());
 
         startActivityForResult(startEditProduct, EditorActivity.REQUEST_CODE_EDIT);
     }
@@ -131,15 +139,17 @@ public class MainActivity extends AppCompatActivity implements
         String productName = data.getStringExtra(EditorActivity.EXTRA_PRODUCT_NAME);
         int productQuantity = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_QUANTITY, -1);
         int productPrice = data.getIntExtra(EditorActivity.EXTRA_PRODUCT_PRICE,-1);
+        String supplierName = data.getStringExtra(EditorActivity.EXTRA_SUPPLIER_NAME);
+        String supplierPhone = data.getStringExtra(EditorActivity.EXTRA_SUPPLIER_PHONE);
 
-        if (!isValidProduct(productName, productQuantity, productPrice)) {
+        if (!isValidProduct(productName, productQuantity, productPrice, supplierName, supplierPhone)) {
             return;
         }
 
         if (requestCode == EditorActivity.REQUEST_CODE_CREATE) {
-            insertProduct(productName, productQuantity, productPrice);
+            insertProduct(productName, productQuantity, productPrice, supplierName, supplierPhone);
         } else {
-            updateProduct(productId, productName, productQuantity, productPrice);
+            updateProduct(productId, productName, productQuantity, productPrice, supplierName, supplierPhone);
         }
     }
 
@@ -168,8 +178,10 @@ public class MainActivity extends AppCompatActivity implements
         mProductAdapter.swapCursor(null);
     }
 
-    private boolean isValidProduct(String name, int quantity, int price) {
-        return !TextUtils.isEmpty(name) && price != -1 && quantity != -1;
+    private boolean isValidProduct(String name, int quantity, int price,
+                                   String supplierName, String supplierPhone) {
+        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(supplierName)
+                && !TextUtils.isEmpty(supplierPhone) && price != -1 && quantity != -1;
     }
 
     private boolean isCorrectResult(int requestCode, int responseCode) {
@@ -179,11 +191,14 @@ public class MainActivity extends AppCompatActivity implements
                 || responseCode == EditorActivity.RESPONSE_CODE_DEL);
     }
 
-    private void insertProduct(String name, int quantity, int price) {
+    private void insertProduct(String name, int quantity, int price,
+                               String supplierName, String supplierPhone) {
         ContentValues values = new ContentValues();
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, name);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
+        values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
+        values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhone);
 
         Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, values);
 
@@ -192,11 +207,14 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void updateProduct(int id, String name, int quantity, int price) {
+    private void updateProduct(int id, String name, int quantity, int price,
+                               String supplierName, String supplierPhone) {
         ContentValues values = new ContentValues();
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, name);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
+        values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
+        values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhone);
 
         int rowsUpdated = getContentResolver().update(ProductContract.ProductEntry.CONTENT_URI, values,
                 "_id = ?", new String[]{String.valueOf(id)});
